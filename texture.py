@@ -25,21 +25,17 @@ def protectedDiv(left, right):
     except ZeroDivisionError:
         return 1
 
+
 def evalSymbReg(individual):
-    genR = []
-    genG = []
-    genB = []
-    func = toolbox.compile(expr=individual)
-    for x in pixels:
-        genR.append(evaluate_tree(tree.arg[0]))
-        genG.append(evaluate_tree(tree.arg[1]))
-        genB.append(evaluate_tree(tree.arg[2]))
+    R = toolbox.compile(expr=individual[0]) #f1(x)
+    G = toolbox.compile(expr=individual[1]) #f2(x)
+    B = toolbox.compile(expr=individual[2]) #f3(x)
 
     x = 0
     for pixel in pixels:
-        dR = (genR[x] - pixel[0])
-        dG = (genG[x] - pixel[1])
-        dB = (genB[x] - pixel[2])
+        dR = (R[x] - pixel[0])
+        dG = (G[x] - pixel[1])
+        dB = (B[x] - pixel[2])
         Dist = math.sqrt((dR**2 + dG**2 + dB**2))
         x+=1
     return Dist,
@@ -57,8 +53,12 @@ creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Individual", gp.PrimitiveTree, fitness=creator.FitnessMin)
 toolbox = base.Toolbox()
 toolbox.register("expr", gp.genHalfAndHalf, pset=pset, min_=1, max_=17)
-toolbox.register("individual", tools.initIterate, creator.Individual, toolbox.expr)
-toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+toolbox.register("individualR", tools.initIterate, creator.Individual, toolbox.expr)
+toolbox.register("individualG", tools.initIterate, creator.Individual, toolbox.expr)
+toolbox.register("individualB", tools.initIterate, creator.Individual, toolbox.expr)
+toolbox.register("populationR", tools.initRepeat, list, toolbox.individualR)
+toolbox.register("populationG", tools.initRepeat, list, toolbox.individualG)
+toolbox.register("populationB", tools.initRepeat, list, toolbox.individualB)
 toolbox.register("compile", gp.compile, pset=pset)
 
 #Registers the parameters for the genetic program. 
