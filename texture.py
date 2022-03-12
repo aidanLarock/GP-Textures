@@ -65,7 +65,7 @@ toolbox.register("populationG", tools.initRepeat, list, toolbox.individualG)
 toolbox.register("populationB", tools.initRepeat, list, toolbox.individualB)
 toolbox.register("compile", gp.compile, pset=pset)
 
-def run(pop, toolbox, halloffame, crossoverRate = params.crossoverRate, mutateRate = params.mutateRate, numGenerations = params.numGenerations, verbose=True):
+def run(pop, toolbox, halloffame, crossoverRate = params.crossoverRate, mutateRate = params.mutateRate, numGenerations = params.numGenerations, stats = None, verbose=True):
     popr = pop[0]
     popg = pop[1]
     popb = pop[2]
@@ -74,11 +74,20 @@ def run(pop, toolbox, halloffame, crossoverRate = params.crossoverRate, mutateRa
     hofG = halloffame[0]
     hofB = halloffame[0]
 
+    logbook1 = tools.Logbook()
+    logbook2 = tools.Logbook()
+    logbook3 = tools.Logbook()
+
+    logbook1.header = ['gen', 'nevals'] + (stats.fields if stats else [])
+    logbook2.header = ['gen', 'nevals'] + (stats.fields if stats else [])
+    logbook3.header = ['gen', 'nevals'] + (stats.fields if stats else [])
+    
+
     for n in range(1, numGenerations+1): 
 
-        redSpring = tools.select(popr, len(popr))
-        greenSpring = tools.select(popg, len(popg))
-        blueSpring = tools.select(popb, len(popb))
+        redSpring = toolbox.select(popr, len(popr))
+        greenSpring = toolbox.select(popg, len(popg))
+        blueSpring = toolbox.select(popb, len(popb))
 
         redSpring = algorithms.varAnd(redSpring, toolbox, crossoverRate, mutateRate)
         greenSpring = algorithms.varAnd(greenSpring, toolbox, crossoverRate, mutateRate)
@@ -107,7 +116,19 @@ def run(pop, toolbox, halloffame, crossoverRate = params.crossoverRate, mutateRa
         popg[:] = greenSpring
         popb[:] = blueSpring
 
-    return [popr, popg, popb]
+        record1 = stats.compile(popr) if stats else {}
+        record2 = stats.compile(popg) if stats else {}
+        record3 = stats.compile(popb) if stats else {}
+  
+        logbook1.record(gen=n, nevals=len(indR), **record1)
+        logbook2.record(gen=n, nevals=len(indG), **record2)
+        logbook3.record(gen=n, nevals=len(indB), **record3)
+
+        if verbose:
+            print(logbook1.stream, logbook2.stream, logbook3.stream)
+          
+
+    return [popr, popg, popb], [logbook1, logbook2, logbook3]
 
 
 def main():
@@ -142,35 +163,6 @@ def main():
     hof = [hor,hog,hob]
 
     pop = run(pop, toolbox, hof)
-
-
-    """
-    #Selects the best individual from the final generation
-    best = tools.selBest(pop, k=1)
-    best = best[0]
-    print("Best Individual: ")
-    print(best)
-    tree = gp.compile(best,pset)
-
-    from datetime import datetime
-
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%d-%b-%Y (%H:%M:%S.%f)")
-
-    path = "\NewImages\*"+timestampStr
-
-    #Using the best selected individual runs the testing data
-    #on the best selected tree. Then creates the confusion matrix
-    #for this particular run. 
-    print("Running Tests: ")
-    for x in sizeX:
-        for y in sizeY:
-            valR = tree(x,y)
-            valG = tree(x,y)
-            valB = tree(x,y)
-
-            (valR,valG,valB)
-    """    
 
 if __name__ == "__main__":
     main()
