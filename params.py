@@ -5,7 +5,7 @@ popSize = 10
 terminals = 2
 crossoverRate = 0.9
 mutateRate = 0.1
-numGenerations = 10 # 200
+numGenerations = 5 # 200
 image = "image/2.jpg"
 
 # (0) No Elitism (1) Using Elitism 

@@ -162,7 +162,38 @@ def main():
     
     hof = [hor,hog,hob]
 
-    pop = run(pop, toolbox, hof)
+    pop, list = run(pop, toolbox, hof)
+
+    bestr = tools.selBest(pop[0], k=1)
+    bestr = bestr[0]
+    print("Best Individual R: ")
+    print(bestr)
+
+    bestg = tools.selBest(pop[1], k=1)
+    bestg = bestg[0]
+    print("Best Individual G: ")
+    print(bestg)
+
+    bestb = tools.selBest(pop[2], k=1)
+    bestb = bestb[0]
+    print("Best Individual B: ")
+    print(bestb)
+
+    input_image = Image.new(mode="RGB", size=(sizeX, sizeY),
+                        color="blue")
+
+    pixel_map = input_image.load()
+
+    treeR = gp.compile(bestr, pset)
+    treeG = gp.compile(bestg, pset)
+    treeB = gp.compile(bestb, pset)
+
+    for i in range(sizeX):
+        for j in range(sizeY): 
+            pixel_map[i,j] = (int(treeR(i,j)), int(treeG(i,j)), int(treeB(i,j)))
+
+    input_image.show()
+    input_image.save("output.png")
 
 if __name__ == "__main__":
     main()
