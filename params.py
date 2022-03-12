@@ -1,6 +1,6 @@
 seed = 746
 maxDepth = 17
-tournamentSize = 3
+tournamentSize = 9
 popSize = 400
 terminals = 2
 crossoverRate = 0.9
