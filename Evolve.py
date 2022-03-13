@@ -16,6 +16,7 @@
 import operator
 import math
 import random
+from xml.etree.ElementTree import tostring
 import pandas as pd
 import numpy as np
 from functools import reduce
@@ -28,8 +29,8 @@ from deap import creator
 from deap import tools
 from deap import gp
 
-
-def runs(in_, sizeX, sizeY, colour):
+pop = None
+def runs(input, sizeX, sizeY, colour):
     # Define new functions
     def protectedDiv(left, right):
         try:
@@ -61,9 +62,9 @@ def runs(in_, sizeX, sizeY, colour):
         dist = 0
         func = toolbox.compile(expr=individual)
         i = 0
-        for Y in range(sizeY):
-            for X in range(sizeX):
-                dist = dist + (func(X,Y)-in_[i])**2
+        for x in range(sizeY):
+            for y in range(sizeX):
+                dist = dist + (func(x,y)-input[i])**2
                 i += 1
         return math.sqrt(dist),
 
@@ -109,12 +110,9 @@ def runs(in_, sizeX, sizeY, colour):
             df[k] = d
         df.to_csv(colour+".csv")
 
-        # print log and best
         best = tools.selBest(pop, k=1)
-        print("Best Individual: ")
-        #print(best[0])
-        best = best[0]
-        print(best)
-        func = gp.compile(best,pset)
-        print(func(1))
+        f = open(colour+".txt","wt")
+        n = f.write(str(best[0]))
+        f.close()
+
     go(colour)

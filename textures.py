@@ -17,7 +17,7 @@ greenP = []
 for pixel in pixels:
    redP.append(pixel[0])
    greenP.append(pixel[1])
-   redP.append(pixel[2])
+   blueP.append(pixel[2])
 
 
 #EV.runs(in_,out_,"red")
@@ -36,7 +36,6 @@ class myThread (threading.Thread):
       EV.runs(self.in_, self.sizeX, self.sizeY, self.colour)
       print ("Exiting " + self.name)
 
-
 # Create new threads
 R = myThread(redP, sizeX, sizeY, "red")
 G = myThread(greenP, sizeX, sizeY, "green")
@@ -50,3 +49,13 @@ R.join()
 G.join()
 B.join()
 print ("Exiting Main Thread")
+
+
+rTree = open("red.txt",'r')
+gTree = open("green.txt",'r')
+bTree = open("blue.txt",'r')
+
+print(rTree.readline())
+print(gTree.readline())
+print(bTree.readline())
+
