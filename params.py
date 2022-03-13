@@ -1,12 +1,12 @@
-seed = 746
+seed = 446
 maxDepth = 17
-tournamentSize = 9
-popSize = 10
+tournamentSize = 3
+popSize = 300
 terminals = 2
 crossoverRate = 0.9
 mutateRate = 0.1
-numGenerations = 5 # 200
-image = "image/2.jpg"
+numGenerations = 100 # 200
+image = "image/3.png"
 
 # (0) No Elitism (1) Using Elitism 
 elite = 1
