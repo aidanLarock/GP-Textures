@@ -1,4 +1,4 @@
-seed = 446
+seed = 911420
 maxDepth = 17
 tournamentSize = 3
 popSize = 30

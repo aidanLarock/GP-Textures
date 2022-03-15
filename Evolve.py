@@ -111,7 +111,7 @@ def runs(input, sizeX, sizeY, colour):
         df.to_csv(colour+".csv")
 
         best = tools.selBest(pop, k=1)
-        f = open(colour+".txt","wt")
+        f = open("./TreeGenerations/"+colour+".txt","wt")
         n = f.write(str(best[0]))
         f.close()
 
